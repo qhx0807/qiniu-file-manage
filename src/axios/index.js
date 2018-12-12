@@ -1,5 +1,5 @@
 import axios from 'axios'
-const apiUrl = ''
+import { apiUrl } from '../config'
 
 axios.interceptors.request.use(function (config) {
   if (~config.url.indexOf('login')) {

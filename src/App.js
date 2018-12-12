@@ -1,12 +1,18 @@
-import React, { Component } from 'react'
-import { Button } from 'antd'
+import React, { Component, Suspense } from 'react'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { renderRoutes } from 'react-router-config'
+import routes from './router'
 
 class App extends Component {
   render () {
     return (
-      <div className='App'>
-        <Button type='primary'>Button</Button>
-      </div>
+      <Router>
+        <Suspense fallback={<div>Loading</div>}>
+          <Switch>
+            {renderRoutes(routes)}
+          </Switch>
+        </Suspense>
+      </Router>
     )
   }
 }
