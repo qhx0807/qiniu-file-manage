@@ -2,7 +2,7 @@ import axios from 'axios'
 import { apiUrl } from '../config'
 
 axios.interceptors.request.use(function (config) {
-  if (~config.url.indexOf('login')) {
+  if (!~config.url.indexOf('login')) {
     config.headers['authorization'] = window.sessionStorage.token || ''
   }
   return config
