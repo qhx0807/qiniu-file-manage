@@ -3,23 +3,28 @@ import { apiUrl } from '../config'
 
 axios.interceptors.request.use(function (config) {
   if (~config.url.indexOf('login')) {
-    config.headers['au'] = window.sessionStorage.token || ''
+    config.headers['authorization'] = window.sessionStorage.token || ''
   }
   return config
 }, function (error) {
   return Promise.reject(error)
 })
 
-const serverApi = (method, url, data, succFoo, errorFoo) => {
-  axios({
-    method: method,
-    url: apiUrl + url,
-    data: Object.assign({}, data)
-  }).then(response => {
-    succFoo(response)
-  }).catch(error => {
-    errorFoo(error)
-  })
+const $api = {
+  get (url) {
+    return new Promise((resolve, reject) => {
+      axios.get(apiUrl + url)
+        .then(response => resolve(response))
+        .catch(error => reject(error))
+    })
+  },
+  post (url, data) {
+    return new Promise((resolve, reject) => {
+      axios.post(apiUrl + url, data)
+        .then(response => resolve(response))
+        .catch(error => reject(error))
+    })
+  }
 }
 
-export default serverApi
+export default $api
