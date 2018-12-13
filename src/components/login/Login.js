@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Form, Icon, Input, Button } from 'antd'
+import { Form, Icon, Input, Button, message } from 'antd'
 import styles from './Login.module.less'
+import $api from '../../axios'
 
 const FormItem = Form.Item
 
@@ -48,10 +49,23 @@ class Login extends Component {
   }
 
   clickHandle () {
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        console.log(values)
         this.setState({ isLoading: true })
+        const response = await $api.post('/login/index', values)
+        if (response.data.errno === 0) {
+          window.sessionStorage.setItem('name', response.data.name)
+          window.sessionStorage.setItem('token', response.data.token)
+          window.sessionStorage.setItem('avatar', response.data.avatar)
+          window.sessionStorage.setItem('id', response.data.id)
+          window.sessionStorage.setItem('remark', response.data.remark)
+          window.sessionStorage.setItem('last_login_time', response.data.last_login_time)
+          message.success('登录成功！')
+          // this.props.history.replace('')
+        } else {
+          this.setState({ isLoading: false })
+          message.warning(response.data.errmsg)
+        }
       }
     })
   }
