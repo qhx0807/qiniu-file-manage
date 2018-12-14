@@ -7,7 +7,7 @@ class App extends Component {
   render () {
     return (
       <Router>
-        <Suspense fallback={<div>Loading</div>}>
+        <Suspense fallback={null}>
           <Switch>
             {renderRoutes(routes)}
           </Switch>
