@@ -1,7 +1,9 @@
 import { lazy } from 'react'
 const Login = lazy(() => import('../components/login/Login'))
 const Main = lazy(() => import('../components/main/Main'))
-const Api = lazy(() => import('../components/admin/Api'))
+const User = lazy(() => import('../components/admin/User'))
+const BucketList = lazy(() => import('../components/admin/BucketList'))
+const BucketInfo = lazy(() => import('../components/admin/BucketInfo'))
 
 const routes = [
   { 
@@ -14,8 +16,16 @@ const routes = [
     component: Main,
     routes: [
       {
-        path: '/Main/Api',
-        component: Api
+        path: '/Main/User',
+        component: User
+      },
+      {
+        path: '/Main/BucketList',
+        component: BucketList
+      },
+      {
+        path: '/Main/BucketInfo/:name',
+        component: BucketInfo
       }
     ]
   }

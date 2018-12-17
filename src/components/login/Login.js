@@ -61,7 +61,7 @@ class Login extends Component {
           window.sessionStorage.setItem('remark', response.data.data.remark)
           window.sessionStorage.setItem('last_login_time', response.data.data.last_login_time)
           message.success('登录成功！')
-          this.props.history.replace('/Main')
+          this.props.history.replace('/Main/Bucket')
         } else {
           this.setState({ isLoading: false })
           message.warning(response.data.errmsg)

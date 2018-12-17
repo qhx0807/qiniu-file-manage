@@ -10,7 +10,19 @@ class Main extends Component {
     super(props)
     this.state = {
       collapsed: false,
-      theme: 'dark'
+      theme: 'dark',
+      menuList: [
+        {
+          icon: 'windows',
+          name: '存储空间',
+          url: '/Main/BucketList'
+        },
+        {
+          icon: 'user',
+          name: '个人信息',
+          url: '/Main/User'
+        }
+      ]
     }
   }
 
@@ -25,19 +37,13 @@ class Main extends Component {
           theme={this.state.theme}
         >
           <div className={styles.logo} />
-          <Menu theme={this.state.theme} mode='inline' defaultSelectedKeys={['1']}>
-            <Menu.Item key='1'>
-              <Icon type='user' />
-              <span>nav 1</span>
-            </Menu.Item>
-            <Menu.Item key='2'>
-              <Icon type='video-camera' />
-              <span>nav 2</span>
-            </Menu.Item>
-            <Menu.Item key='3'>
-              <Icon type='upload' />
-              <span>nav 3</span>
-            </Menu.Item>
+          <Menu theme={this.state.theme} onClick={this.onClickMenuHandle.bind(this)} mode='inline' defaultSelectedKeys={['bucket']}>
+            {this.state.menuList.map(item => {
+              return (<Menu.Item key={item.url}>
+                <Icon type={item.icon} />
+                <span>{item.name}</span>
+              </Menu.Item>)
+            })}
           </Menu>
         </Sider>
         <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200 }}>
@@ -61,6 +67,11 @@ class Main extends Component {
     this.setState({
       collapsed: !this.state.collapsed
     })
+  }
+
+  onClickMenuHandle (item) {
+    const { key } = item
+    this.props.history.push(key)
   }
 }
 
