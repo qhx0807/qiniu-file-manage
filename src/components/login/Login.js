@@ -42,7 +42,7 @@ class Login extends Component {
 
   componentDidMount () {
     const defaultValue = {
-      username: 'qhx0807',
+      username: 'hifete_bbt@163.com',
       password: '123456'
     }
     this.props.form.setFieldsValue({ ...defaultValue })
@@ -61,7 +61,7 @@ class Login extends Component {
           window.sessionStorage.setItem('remark', response.data.data.remark)
           window.sessionStorage.setItem('last_login_time', response.data.data.last_login_time)
           message.success('登录成功！')
-          this.props.history.replace('/Main/Bucket')
+          this.props.history.replace('/Main/BucketList')
         } else {
           this.setState({ isLoading: false })
           message.warning(response.data.errmsg)

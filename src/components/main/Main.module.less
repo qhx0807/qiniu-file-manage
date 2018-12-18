@@ -21,7 +21,30 @@
   left: 0;
 }
 .content{
-  margin: 24px 16px;
+  margin: 88px 16px 24px 16px;
   padding: 24px;
   background-color: #fff;
+}
+.header{
+  background-color: #fff;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+}
+.headerRight{
+  float: right;
+  height: 100%;
+  overflow: hidden;
+  padding-right: 20px;
+  section{
+    cursor: pointer;
+    padding: 0 12px;
+    display: inline-block;
+    transition: all .3s;
+    height: 100%;
+    .username{
+      font-size: 14px;
+      margin-left: 6px;
+    }
+  }
 }

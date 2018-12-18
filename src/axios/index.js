@@ -11,9 +11,15 @@ axios.interceptors.request.use(function (config) {
 })
 
 const $api = {
-  get (url) {
+  get (url, query = {}) {
+    let queryStr = '?'
+    if (Object.keys(query).length > 0) {
+      for (let k in query) {
+        queryStr += k + '=' + query[k] + '&'
+      }
+    }
     return new Promise((resolve, reject) => {
-      axios.get(apiUrl + url)
+      axios.get(apiUrl + url + queryStr)
         .then(response => resolve(response))
         .catch(error => reject(error))
     })

@@ -43,8 +43,7 @@ class BucketList extends Component {
   }
 
   onClickBucketHandle (e) {
-    console.log(this)
-    this.props.history.push({ pathName: '/Main/BucketInfo/', state: { name: e } })
+    this.props.history.push('/Main/BucketInfo/' + e)
   }
 }
 

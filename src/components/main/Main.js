@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Avatar, Dropdown } from 'antd'
 import { renderRoutes } from 'react-router-config'
 import styles from './Main.module.less'
 
@@ -9,7 +9,9 @@ class Main extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      collapsed: false,
+      collapsed: true,
+      username: 'loading...',
+      avatar: '',
       theme: 'dark',
       menuList: [
         {
@@ -27,6 +29,23 @@ class Main extends Component {
   }
 
   render () {
+    const menu = (
+      <Menu onClick={this.onClickUserDropMenu.bind(this)}>
+        <Menu.Item key='usercenter'>
+          <Icon type='user' />
+          <span>个人中心</span>
+        </Menu.Item>
+        <Menu.Item key='setting'>
+          <Icon type='setting' />
+          <span>安全设置</span>
+        </Menu.Item>
+        <Menu.Divider></Menu.Divider>
+        <Menu.Item key='logout'>
+          <Icon type='logout' />
+          <span>退出登录</span>
+        </Menu.Item>
+      </Menu>
+    )
     return (
       <Layout style={{ height: '100%' }}>
         <Sider
@@ -47,12 +66,20 @@ class Main extends Component {
           </Menu>
         </Sider>
         <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200 }}>
-          <Header style={{ background: '#fff', padding: 0 }}>
+          <Header className={styles.header}>
             <Icon
               className={styles.trigger}
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle.bind(this)}
             />
+            <div className={styles.headerRight}>
+              <Dropdown overlay={menu}>
+                <section>
+                  <Avatar src={this.state.avatar} />
+                  <span className={styles.username}>{this.state.username}</span>
+                </section>
+              </Dropdown>
+            </div>
           </Header>
           <Content className={styles.content}>
             { renderRoutes(this.props.route.routes) }
@@ -61,6 +88,13 @@ class Main extends Component {
         </Layout>
       </Layout>
     )
+  }
+
+  componentWillMount () {
+    this.setState({
+      username: window.sessionStorage.name || 'loading...',
+      avatar: window.sessionStorage.avatar
+    })
   }
 
   toggle () {
@@ -72,6 +106,18 @@ class Main extends Component {
   onClickMenuHandle (item) {
     const { key } = item
     this.props.history.push(key)
+  }
+
+  onClickUserDropMenu (item) {
+    const { key } = item
+    switch (key) {
+      case 'logout':
+        window.sessionStorage.clear()
+        this.props.history.replace('/')
+        break
+      default:
+        return false
+    }
   }
 }
 
