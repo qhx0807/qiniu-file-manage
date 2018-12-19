@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { List, Card, message, Button } from 'antd'
+import { message, Divider, Table, Button } from 'antd'
 import $api from '../../axios'
 
 class bucketInfo extends Component {
@@ -8,21 +8,66 @@ class bucketInfo extends Component {
     this.state = {
       marker: '',
       loading: true,
-      files: []
+      files: [],
+      columns: [
+        {
+          title: '文件名',
+          dataIndex: 'key',
+          key: 'key'
+        },
+        {
+          title: '文件类型',
+          dataIndex: 'mimeType',
+          key: 'mimeType'
+        },
+        {
+          title: '存储类型',
+          dataIndex: 'type',
+          key: 'type',
+          render: (text) => {
+            let str = text === 1 ? '低频存储' : '普通存储'
+            return <span>{str}</span>
+          }
+        },
+        {
+          title: '文件大小',
+          dataIndex: 'fsize',
+          key: 'fsize'
+        },
+        {
+          title: '最后更新',
+          dataIndex: 'putTime',
+          key: 'putTime'
+        },
+        {
+          title: '操作',
+          dataIndex: 'hash',
+          key: 'hash',
+          render: () => (
+            <span>
+              <a href='javascript:;'>预览</a>
+              <Divider type='vertical' />
+              <a href='javascript:;'>更多</a>
+            </span>
+          )
+        }
+      ]
     }
   }
 
   render () {
     return (
-      <List grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 8 }}
-        dataSource={this.state.files}
-        loading={this.state.loading}
-        renderItem={item => (
-          <List.Item>
-            <Card>{item.key}</Card>
-          </List.Item>
-        )}
-      />
+      <div>
+        <Table
+          style={{ minHeight: 600 }}
+          columns={this.state.columns}
+          pagination={false}
+          loading={this.state.loading}
+          dataSource={this.state.files} />
+        <div style={{ textAlign: 'center' }}>
+          { this.state.marker && <Button onClick={this.onClickLoadMore.bind(this)}>Load more</Button> }
+        </div>
+      </div>
     )
   }
 
@@ -35,7 +80,7 @@ class bucketInfo extends Component {
     const data = {
       bucket: name,
       marker: this.state.marker,
-      limit: 100,
+      limit: 10,
       prefix: '',
       delimiter: ''
     }
@@ -45,7 +90,7 @@ class bucketInfo extends Component {
     if (response.data.errno === 0 && response.data.data.items) {
       this.setState({
         marker: response.data.data.marker,
-        files: response.data.data.items
+        files: this.state.files.concat(response.data.data.items)
       })
     } else {
       message.warning(response.data.errmsg)
@@ -55,6 +100,11 @@ class bucketInfo extends Component {
   async getBucketDomainList (name) {
     const response = await $api.get('/bucket/domain?bucket=' + name)
     console.log(response)
+  }
+
+  onClickLoadMore () {
+    const { name } = this.props.match.params
+    this.geBucketFilesList(name)
   }
 }
 

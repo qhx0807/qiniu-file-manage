@@ -47,7 +47,7 @@ class Main extends Component {
       </Menu>
     )
     return (
-      <Layout style={{ height: '100%' }}>
+      <Layout style={{ minHeight: '100%' }}>
         <Sider
           trigger={null}
           collapsible
@@ -66,19 +66,21 @@ class Main extends Component {
           </Menu>
         </Sider>
         <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200 }}>
-          <Header className={styles.header}>
-            <Icon
-              className={styles.trigger}
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle.bind(this)}
-            />
-            <div className={styles.headerRight}>
-              <Dropdown overlay={menu}>
-                <section>
-                  <Avatar src={this.state.avatar} />
-                  <span className={styles.username}>{this.state.username}</span>
-                </section>
-              </Dropdown>
+          <Header className={styles.header} style={{ width: `calc(100% - ${this.state.collapsed ? '80px' : '200px'})` }}>
+            <div className={styles.headerContent}>
+              <Icon
+                className={styles.trigger}
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.toggle.bind(this)}
+              />
+              <div className={styles.headerRight}>
+                <Dropdown overlay={menu}>
+                  <section>
+                    <Avatar src={this.state.avatar} />
+                    <span className={styles.username}>{this.state.username}</span>
+                  </section>
+                </Dropdown>
+              </div>
             </div>
           </Header>
           <Content className={styles.content}>

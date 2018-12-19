@@ -52,8 +52,12 @@ class Login extends Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({ isLoading: true })
-        const response = await $api.post('/login/index', values)
-        if (response.data.errno === 0) {
+        const response = await $api.post('/login/index', values).catch(error => {
+          message.warning(error.toString())
+        })
+        this.setState({ isLoading: false })
+        if (!response) return false
+        if (response && response.data.errno === 0) {
           window.sessionStorage.setItem('name', response.data.data.name)
           window.sessionStorage.setItem('token', response.data.data.token)
           window.sessionStorage.setItem('avatar', response.data.data.avatar)
@@ -63,8 +67,7 @@ class Login extends Component {
           message.success('登录成功！')
           this.props.history.replace('/Main/BucketList')
         } else {
-          this.setState({ isLoading: false })
-          message.warning(response.data.errmsg)
+          message.warning(response.data.errmsg || '登录失败！')
         }
       }
     })
